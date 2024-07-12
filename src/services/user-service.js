@@ -16,25 +16,11 @@ class UserService {
 
     async signup(data) {
         try {
-            const isExists = await this.getUserByEmail(data.email); 
-            if (!isExists) {
                 const newUser = await this.userRepository.create(data);
                 const verificationToken = newUser.genJWT();
-                await sendVerificationEmail(data.email, verificationToken,'verify');//'verify' to identify type of mail to send
-                return   { message: 'Verification link sent to your email'};
-            } else if (isExists.isVerified) {
-                throw new ClientError('Duplicate USer',
-                                        'Try with another Email',
-                                        'User already exists',
-                                        StatusCodes.BAD_REQUEST
-                );
-            } else {
-                throw { message: 'Verification email already sent.Please verify your email.'};
-            }
+                
         } catch (error) {
-            if(error.name=='ValidationError'){
-                throw new ValidationError(error);
-            }
+           
             throw error;
            
         }
@@ -74,9 +60,6 @@ class UserService {
       if (!user.comparePassword(data.password)) {
         throw { message: "Wrong password" };
       }
-      if (!user.isVerified) {
-        throw { message: "Email not verified,verification link sent already" };
-      }
       const token = user.genJWT();
       return token;
     } catch (error) {
@@ -86,14 +69,11 @@ class UserService {
   async sendResetLink(email) {
     try {
       const isExists = await this.getUserByEmail(email);
-      if (isExists && isExists.isVerified) {
+      
         const flag = "link";
         const token = isExists.genJWT();
         await sendVerificationEmail(email, token, flag);
         return { message: "Password Reset link sent to your email" };
-      } else {
-        throw { message: "No User Exists ,Email is not registered/verified" };
-      }
     } catch (error) {
       console.log(error);
       throw error;

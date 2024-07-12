@@ -15,15 +15,14 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    role: {
+    organization: {
+      type: String,
+      required: true
+  },
+  
+    position: {
         type: String,
-        enum: ['user', 'admin'],
         required: true,
-        default: 'user'
-    },
-    isVerified: {
-        type: Boolean,
-        default: false
     }
 }, { timestamps: true });
 

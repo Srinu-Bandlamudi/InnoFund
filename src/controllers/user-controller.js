@@ -8,7 +8,9 @@ const signup = async (req, res) => {
             email: req.body.email,
             password: req.body.password,
             name: req.body.name,
-            role:req.body.role
+            position:req.body.position,
+            organization:req.body.organization
+
         });
         return res.status(201).json({
             success: true,

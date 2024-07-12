@@ -12,9 +12,9 @@ const transporter = nodemailer.createTransport({
 async function sendVerificationEmail(to, token, flag) {
   var url = "";
   if (flag == "verify") {
-    url = `localhost:3009/api/verify/${token}`;
+    url = `https//localhost:3009/api/verify/${token}`;
   } else {
-    url = `localhost:3009/api/reset/password/${token}`;
+    url = `https//localhost:3009/api/reset/password/${token}`;
   }
 
     const mailOptions = {
